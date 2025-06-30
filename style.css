@@ -1,0 +1,98 @@
+ *{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    background-color: #548679;
+    font-family: Arial, sans-serif;
+    text-align: center ;
+
+}
+.container{
+    width: 100%;
+    height: 70vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.game-board{
+    height: 60vmin;
+    width: 60vmin;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5vmin
+}
+.cell{
+  height: 18vmin;
+  width: 18vmin;
+  border-radius: 1rem;
+  border: none;
+  font-size: 10vmin;
+  color: crimson;
+    background-color: #f0f0f0;
+}
+#restart-btn{
+    width: 20vmin;
+    height: 6vmin;
+    border-radius: 1rem;
+    border: none;
+    background-color: #140202;
+    font-size: 3vmin;
+    color: white;
+    cursor: pointer;
+} 
+#newgame-btn{
+    margin-top: 20px;
+    width: 20vmin;
+    height: 6vmin;
+    border-radius: 1rem;
+    border: none;
+    background-color: #140202;
+    font-size: 3vmin;
+    color: white;
+    cursor: pointer;
+}  
+/*  adding zooming effect on restart and new game button it should be zoomed onn click */
+#restart-btn:active, #newgame-btn:active {
+    transform: scale(0.90);
+}
+/* hiding the message container it will appear when game is over we will do it with JavaScript */
+.msg-container-hidden{
+    padding-top: 20px;
+    display: none;
+}
+.msg-container-hidden h2{
+    color: red;
+}
+
+/* Blinking glow effect for New Game button */
+#newgame-btn.blinking_glow {
+    animation: blink 1s infinite;
+    box-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 30px #ff0000;
+}
+
+@keyframes blink {
+0% {
+    opacity: 1;
+    box-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 30px #ff0000;
+}
+50% {
+    opacity: 0.7;
+    box-shadow: none;
+}
+100% {
+    opacity: 1;
+    box-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 30px #ff0000;
+}
+}
+
+/* Add color for 0 and x */
+.cell.zero {
+    color: red;
+}
+.cell.x {
+    color: blue;
+}
