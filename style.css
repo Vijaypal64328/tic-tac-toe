@@ -9,6 +9,12 @@ body{
     text-align: center ;
 
 }
+h1{
+    color: #140202;
+    font-size: 5vmin;
+    margin-top: 30px;
+    font-size: 60px;
+}
 .container{
     width: 100%;
     height: 70vh;
