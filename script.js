@@ -19,71 +19,88 @@ const winningConditions = [
 ];
 // Function to handle cell click
 cells.forEach((cell) => {
-  cell.addEventListener("click", () => {
-    if(turn0){     //initially turn0 is true, so player0 will play first
-        cell.innerText="0"; //after player0 plays, turn0 will be false
-        cell.classList.add("zero");
-        cell.classList.remove("x");
-        turn0=false;
-    }
-    else{
-        cell.innerText="x"; //after player1 plays, turn0 will be true
-        cell.classList.add("x");
-        cell.classList.remove("zero");
-        turn0=true;
-    }
-    cell.disabled=true; // cell button will be fixed after any player plays it once 
-    checkWinner(); // we are calling the function to check if any player has won
-  });
+    cell.addEventListener("click", () => {
+        if(turn0){
+                cell.innerText="0";
+                cell.classList.add("zero");
+                cell.classList.remove("x");
+                turn0=false;
+        }
+        else{
+                cell.innerText="x";
+                cell.classList.add("x");
+                cell.classList.remove("zero");
+                turn0=true;
+        }
+        cell.disabled=true;
+        checkWinner();
+        checkDraw(); // Check for draw after each move
+    });
 });
 //function to disable all the cells wheen any of the player wins
 const disableCells = () => {
-    for(let cell of cells) {
-        cell.disabled = true; // this will disable all the cells
-    }
+        for(let cell of cells) {
+                cell.disabled = true;
+        }
 };
 // function to enable all the cells when new game is restarted
 const enableCells = () => {
-    for(let cell of cells) {
-        cell.disabled = false; // this will enable all the cells
-        cell.innerText = ""; // this will clear the text inside the cell
-        cell.classList.remove("zero", "x");
-    }
-    msgContainer.classList.add("msg-container-hidden"); // this will hide the message container
-    // Remove blinking_glow from New Game button
-    newgamebtn.classList.remove("blinking_glow");
+        for(let cell of cells) {
+                cell.disabled = false;
+                cell.innerText = "";
+                cell.classList.remove("zero", "x");
+        }
+        msgContainer.classList.add("msg-container-hidden");
+        newgamebtn.classList.remove("blinking_glow");
+        msg.style.fontSize = ""; // Reset font size
 };
 // Function to show the winner
 const showWinner = (winner) => {
-    msgContainer.classList.remove("msg-container-hidden");
-    msg.innerText = "Congratulations! Player " + winner + " wins!";
-    // Add blinking_glow to New Game button
-    newgamebtn.classList.add("blinking_glow");
-    disableCells(); // we are calling the function to disable all the cells when any player wins
+        msgContainer.classList.remove("msg-container-hidden");
+        msg.innerText = "Congratulations! Player " + winner + " wins!";
+        msg.style.fontSize = ""; // Reset font size
+        newgamebtn.classList.add("blinking_glow");
+        disableCells();
 };
 // Function to check for a winner
  const checkWinner = () => {
-   for(let it of winningConditions){  // this is same as we take elements from adjacency list in graph
-         let pos1val= cells[it[0]].innerText;    // this assing the value of cell to a variable pos1val innerText is used to get the text(0 or x) inside the cell
-         let pos2val= cells[it[1]].innerText;
-         let pos3val= cells[it[2]].innerText;
-         // if any of the cell is empty, then we will not check for winner ,if not empty then we will check if all the three cells have same value
-         // if all the three cells have same value, then we will declare that player as winner
-         if(pos1val != "" && pos2val != "" && pos3val != "") {
-            if(pos1val === pos2val && pos2val === pos3val){
-                showWinner(pos1val); // we are calling the function to show the winner
-            }
-         }
-   }
+     for(let it of winningConditions){
+                 let pos1val= cells[it[0]].innerText;
+                 let pos2val= cells[it[1]].innerText;
+                 let pos3val= cells[it[2]].innerText;
+                 if(pos1val != "" && pos2val != "" && pos3val != "") {
+                        if(pos1val === pos2val && pos2val === pos3val){
+                                showWinner(pos1val);
+                                return; // Stop further checking if winner found
+                        }
+                 }
+     }
  }
 // Function to restart the game
 const restartGame = () => {
-    enableCells(); // we are calling the function to enable all the cells
-    turn0 = true; // we are setting the turn0 to true so that player0 can play first
-    msg.innerText = ""; // this will clear the text inside the message container
-    msgContainer.classList.add("msg-container-hidden"); // this will hide the message container
-    // Remove blinking_glow from New Game button
-    newgamebtn.classList.remove("blinking_glow");
+        enableCells();
+        turn0 = true;
+        msg.innerText = "";
+        msgContainer.classList.add("msg-container-hidden");
+        newgamebtn.classList.remove("blinking_glow");
+        msg.style.fontSize = ""; // Reset font size
 }
 newgamebtn.addEventListener("click", enableCells);
-restartbtn.addEventListener("click", restartGame); // we are calling the function to restart the game when restart button is clicked
+restartbtn.addEventListener("click", restartGame);
+// adding condition for draw 
+const checkDraw = () => {
+        let allCellsFilled = Array.from(cells).every(cell => cell.innerText !== "");
+        // Only show draw if there is no winner
+        let hasWinner = Array.from(winningConditions).some(it => {
+                let pos1val = cells[it[0]].innerText;
+                let pos2val = cells[it[1]].innerText;
+                let pos3val = cells[it[2]].innerText;
+                return pos1val !== "" && pos1val === pos2val && pos2val === pos3val;
+        });
+        if (allCellsFilled && !hasWinner) {
+                msgContainer.classList.remove("msg-container-hidden");
+                msg.innerText = "It's a draw!";
+                disableCells();
+                newgamebtn.classList.add("blinking_glow");
+        }
+};
